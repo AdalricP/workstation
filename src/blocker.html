@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blocker App</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff;
+        }
+        
+        .tabs {
+            display: flex;
+            padding: 0 20px;
+        }
+        
+        .tab {
+            padding: 20px 30px;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: #888;
+            transition: all 0.2s ease;
+            flex-grow: 1;
+        }
+        
+        .tab.active {
+            color: #c70000;
+            font-weight: 500;
+        }
+        
+        .tab:hover:not(.active) {
+            color: #c70000;
+        }
+        
+        .tab-icon {
+            margin-right: 10px;
+            width: 20px;
+            height: 20px;
+        }
+        
+        .content {
+            flex: 1;
+            overflow: auto;
+        }
+        
+        .add-form {
+            display: flex;
+            padding: 16px 20px;
+            justify-content: space-between;
+        }
+        
+        .add-input {
+            flex: 1;
+            
+            border: none;
+            border-right: none;
+            border-top-left-radius: 4px;
+            border-bottom-left-radius: 4px;
+            outline: none;
+            font-size: 16px;
+        }
+        
+        .add-input:focus {
+            border-color: #aaa;
+        }
+        
+        .add-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            color: #555;
+            border: none;
+            padding: 12px 16px;
+            cursor: pointer;
+            border-top-right-radius: 4px;
+            border-bottom-right-radius: 4px;
+            transition: all 0.2s ease;
+        }
+        
+        .add-button:hover {
+            color: #c70000
+        }
+        
+        .list-container {
+            background-color: white;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .list {
+            list-style: none;
+        }
+        
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #ffffff;
+        }
+        
+        .list-item:last-child {
+            border-bottom: none;
+        }
+        
+        .delete-button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #c70000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+        
+        .delete-button:hover {
+            color: #fff;
+            background-color: #c70000;
+        }
+        
+        .empty-message {
+            padding: 30px;
+            text-align: center;
+            color: #aaa;
+            font-size: 15px;
+        }
+        
+        .footer {
+            padding: 16px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+
+.menu-button {
+  #p1 {
+    color: #c4c4c4;
+    transition: all 0.5s ease;
+  }
+  #p2 {
+    color: #e0e0e0;
+    transition: all 0.5s ease;
+  }
+
+  #p3 {
+    color: #ababab;
+    transition: all 0.5s ease;
+  }
+
+  #p4{
+    color: #ababab;
+    transition: all 0.5s ease;
+  }
+
+  #p5 {
+    color: hsl(0, 0%, 73%);
+  }
+  
+}
+.Menu {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+.icon-btn {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.icon-btn svg {
+  width: 24px;
+  height: 24px;
+}
+.menu-button:hover {
+  #p1 {
+    color: hsl(0, 0%, 39%);
+  }
+  #p2 {
+    color: hsl(0, 0%, 49%);
+  }
+  #p3 {
+    color: hsl(0, 0%, 34%);
+  }
+  #p4 {
+    color: hsl(0, 0%, 44%);
+  }
+  #p5 {
+    color: hsl(0, 0%, 49%);
+  }
+}
+    </style>
+</head>
+<body>
+
+    
+    <div class="tabs">
+        <button class="tab active" id="websites-tab">
+            <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="2" y1="12" x2="22" y2="12"></line>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            Allowed Websites
+        </button>
+        <button class="tab" id="apps-tab">
+            <svg class="tab-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            Allowed Apps
+        </button>
+    </div>
+    
+    <div class="content">
+
+        
+        <div class="tab-content" id="websites-content">
+            <div class="list-container">
+                <ul class="list" id="websites-list">
+                    <!-- Websites will be populated here -->
+                </ul>
+                <div class="empty-message hidden" id="websites-empty">No websites added yet</div>
+            </div>
+        </div>
+        
+        <div class="tab-content hidden" id="apps-content">
+            <div class="list-container">
+                <ul class="list" id="apps-list">
+                    <!-- Apps will be populated here -->
+                </ul>
+                <div class="empty-message hidden" id="apps-empty">No apps added yet</div>
+            </div>
+        </div>
+
+        <div class="add-form">
+            <input type="text" class="add-input" id="add-input" placeholder="Enter website URL...">
+            <button class="add-button" id="add-button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" y1="5" x2="12" y2="19"></line>
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+
+    <div class="Menu">
+        <button id="Timer" class="icon-btn menu-button" onclick="window.location.href='index.html'">
+            <svg id="p5" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="currentColor" height="800px" width="800px" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve">
+                <g>
+                    <g>
+                        <path d="M256,0C114.842,0,0,114.842,0,256s114.842,256,256,256s256-114.842,256-256S397.158,0,256,0z M374.821,283.546H256    c-15.148,0-27.429-12.283-27.429-27.429V137.295c0-15.148,12.281-27.429,27.429-27.429s27.429,12.281,27.429,27.429v91.394h91.392    c15.148,0,27.429,12.279,27.429,27.429C402.249,271.263,389.968,283.546,374.821,283.546z"/>
+                    </g>
+                </g>
+                </svg>
+        </button>
+
+      </div>
+
+      <script>
+        // Tab management remains the same
+        let activeTab = 'websites';
+        const websitesTab = document.getElementById('websites-tab');
+        const appsTab = document.getElementById('apps-tab');
+        const websitesContent = document.getElementById('websites-content');
+        const appsContent = document.getElementById('apps-content');
+        const addInput = document.getElementById('add-input');
+        const addButton = document.getElementById('add-button');
+        const websitesList = document.getElementById('websites-list');
+        const appsList = document.getElementById('apps-list');
+        const websitesEmpty = document.getElementById('websites-empty');
+        const appsEmpty = document.getElementById('apps-empty');
+    
+        // Initialize with real data from Electron
+        let whitelistData = [];
+        
+        // Load initial data
+        window.electronAPI.getWhitelist().then(data => {
+            whitelistData = data;
+            renderLists();
+        });
+    
+        // Tab switching
+        websitesTab.addEventListener('click', () => setActiveTab('websites'));
+        appsTab.addEventListener('click', () => setActiveTab('apps'));
+    
+        // Add item
+        addButton.addEventListener('click', addItem);
+        addInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') addItem();
+        });
+    
+        // Timer button
+        document.getElementById('Timer').addEventListener('click', (e) => {
+            e.preventDefault();
+            window.electronAPI.openTimer();
+        });
+    
+        function setActiveTab(tab) {
+            activeTab = tab;
+            websitesTab.classList.toggle('active', tab === 'websites');
+            appsTab.classList.toggle('active', tab === 'apps');
+            websitesContent.classList.toggle('hidden', tab !== 'websites');
+            appsContent.classList.toggle('hidden', tab !== 'apps');
+            addInput.placeholder = tab === 'websites' 
+                ? 'Enter domain (e.g., example.com)' 
+                : 'Enter app name...';
+        }
+    
+        async function addItem() {
+            const value = addInput.value.trim();
+            if (!value) return;
+    
+            if (activeTab === 'websites') {
+                // Validate domain format
+                if (!isValidDomain(value)) {
+                    alert('Please enter a valid domain (e.g., example.com)');
+                    return;
+                }
+                
+                const success = await window.electronAPI.addToWhitelist(value);
+                if (success) {
+                    whitelistData.push(value);
+                    addInput.value = '';
+                    renderLists();
+                }
+            } else {
+                // App blocking would go here
+                alert('App blocking not implemented yet');
+            }
+        }
+    
+        async function removeItem(index) {
+            const domain = whitelistData[index];
+            const success = await window.electronAPI.removeFromWhitelist(domain);
+            if (success) {
+                whitelistData.splice(index, 1);
+                renderLists();
+            }
+        }
+    
+        function renderLists() {
+            // Render websites
+            if (whitelistData.length > 0) {
+                websitesList.innerHTML = whitelistData.map((site, index) => `
+                    <li class="list-item">
+                        <span>${site}</span>
+                        <button class="delete-button" onclick="removeItem(${index})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                        </button>
+                    </li>
+                `).join('');
+                websitesEmpty.classList.add('hidden');
+            } else {
+                websitesList.innerHTML = '';
+                websitesEmpty.classList.remove('hidden');
+            }
+            
+            // Apps list would be rendered here when implemented
+            appsEmpty.classList.remove('hidden');
+        }
+    
+        function isValidDomain(domain) {
+            // Simple domain validation
+            return /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i.test(domain);
+        }
+    
+        // Make removeItem available globally
+        window.removeItem = removeItem;
+    </script>
+</body>
+</html>
